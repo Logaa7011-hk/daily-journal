@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Arbitrator | 交易裁判员工作台</title>
+    <link rel="stylesheet" href="dashboard.css?v=2">
+</head>
+<body>
+    <div class="overlay"></div>
+    
+    <div id="app">
+        <header class="fade-in">
+            <div class="logo">交易裁判长 (The Arbitrator)</div>
+            <div class="date-pill" id="current-date">2026-04-01 周三</div>
+        </header>
+
+        <aside class="fade-in" style="animation-delay: 0.2s">
+            <!-- Sentiment Section -->
+            <section class="glass-card">
+                <h2>市场情绪探测 (盘感)</h2>
+                <div class="gauge-container">
+                    <svg class="gauge-svg">
+                        <circle class="gauge-bg" cx="75" cy="75" r="70"></circle>
+                        <circle class="gauge-fill" id="sentiment-gauge" cx="75" cy="75" r="70"></circle>
+                    </svg>
+                    <div class="gauge-text">
+                        <div style="font-size: 0.8rem; color: rgba(255,255,255,0.6)">震荡磨底</div>
+                        <div style="font-size: 1.2rem; font-weight: 800; font-family: 'Orbitron'">3800-4000</div>
+                    </div>
+                </div>
+                <p style="font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 15px; text-align: center;">
+                    短期反转预期：低 | 财报季风险压制
+                </p>
+            </section>
+
+            <!-- Discipline Score Section -->
+            <section class="glass-card">
+                <h2>纪律评分</h2>
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <span style="font-size: 3rem; font-family: 'Orbitron'; color: var(--secondary-gold); font-weight: 900;">85</span>
+                    <span style="color: rgba(255,255,255,0.4)">/100</span>
+                </div>
+                <div class="discipline-list" id="discipline-list">
+                    <!-- Dynamic Items -->
+                </div>
+            </section>
+        </aside>
+
+        <main class="fade-in" style="animation-delay: 0.4s">
+            <div class="section-grid">
+                <!-- Core Targets Section -->
+                <section class="glass-card">
+                    <h2>今日操盘重心 (复盘核心)</h2>
+                    <div id="core-actions">
+                        <div class="discipline-item pass">
+                            <span class="status-icon pass">✔</span>
+                            <div>
+                                <div style="font-weight: 600;">竞价挂单量校验</div>
+                                <div style="font-size: 0.7rem; color: rgba(255,255,255,0.6)">> 昨日竞价量则轻仓，否则全天空仓</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="glass-card">
+                    <h2>风险预警</h2>
+                    <ul style="font-size: 0.85rem; line-height: 1.6; color: rgba(255,255,255,0.8); padding-left: 15px;">
+                        <li>财报地雷季：4月业绩预告密集</li>
+                        <li>N盛龙高位筹码压力区 (23-27元)</li>
+                        <li>监管趋严：劣质小市值面临退市风险</li>
+                    </ul>
+                </section>
+            </div>
+
+            <div class="trade-matrix" id="trade-matrix">
+                <!-- Trade Cards Dynamic -->
+            </div>
+
+            <!-- 断板回踩监控面板 -->
+            <div class="glass-card monitor-panel fade-in" style="margin-top: 20px; animation-delay: 0.5s">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h2 class="cyan-text text-glow" style="margin: 0;">涨停断板三天回踩监控室 🛰️</h2>
+                    <span id="scan-status" style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">就绪</span>
+                </div>
+                <div class="scanner-controls" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-bottom: 15px;">
+                    <button class="action-btn" onclick="runScan('normal', 'near')" style="width: 100%; padding: 10px; background: rgba(0,255,170,0.1); color: var(--primary-cyan); border: 1px solid var(--primary-cyan);">普通 · 回踩均线</button>
+                    <button class="action-btn" onclick="runScan('normal', 'far')" style="width: 100%; padding: 10px; background: rgba(0,255,170,0.1); color: var(--primary-cyan); border: 1px solid var(--primary-cyan);">普通 · 远离横盘</button>
+                    <button class="action-btn" onclick="runScan('leader', 'near')" style="width: 100%; padding: 10px; background: rgba(255,166,0,0.1); color: #ffa600; border: 1px solid #ffa600;">龙头 · 回踩均线</button>
+                    <button class="action-btn" onclick="runScan('leader', 'far')" style="width: 100%; padding: 10px; background: rgba(255,166,0,0.1); color: #ffa600; border: 1px solid #ffa600;">龙头 · 远离横盘</button>
+                </div>
+                <div class="scanner-results" id="scanner-results" style="min-height: 60px; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 15px; font-size: 0.9rem; color: #ddd; max-height: 200px; overflow-y: auto;">
+                    点击上方按钮启动同花顺 i问财深度扫描...
+                </div>
+            </div>
+        </main>
+
+        <!-- Chat Overlay -->
+        <div class="chat-container glass-card fade-in" id="chat-container" style="animation-delay: 0.6s">
+            <div class="chat-header">
+                <span class="status-dot"></span>
+                <span>裁判长对话 (AI 实时诊断)</span>
+                <button class="archive-btn" id="archive-btn">归档至 Notion</button>
+                <button class="close-chat" id="close-chat">&times;</button>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <div class="msg bot-msg">你好。我是你的交易裁判长。请汇报你今日的操作或突发想法，我会针对你的「博弈概率」进行严审。</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="输入你的操盘想法..." autocomplete="off">
+                <button id="send-btn">发送</button>
+            </div>
+        </div>
+
+        <button class="chat-toggle-btn fade-in hidden" id="chat-toggle" style="animation-delay: 0.8s">
+            裁判长对话 💬
+        </button>
+    </div>
+
+    <script src="dashboard.js?v=9"></script>
+</body>
+</html>
